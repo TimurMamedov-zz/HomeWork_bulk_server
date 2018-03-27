@@ -29,12 +29,11 @@ private:
     {
         auto self(shared_from_this());
         boost::asio::async_read(socket_,
-                                boost::asio::buffer(read_str, strlen(read_str)),
+                                boost::asio::buffer(read_str, 20),
                                 [this, self](boost::system::error_code ec, std::size_t /*length*/)
         {
             if (!ec)
             {
-                std::cout << read_str << std::endl;
                 do_read();
             }
             else
