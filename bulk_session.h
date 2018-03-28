@@ -30,10 +30,27 @@ private:
         auto self(shared_from_this());
         boost::asio::async_read(socket_,
                                 boost::asio::buffer(read_str, 20),
-                                [this, self](boost::system::error_code ec, std::size_t /*length*/)
+                                [this, self](boost::system::error_code ec, std::size_t length)
         {
             if (!ec)
             {
+//                std::string str;
+//                str += item->second.second;
+//                item->second.second = "";
+//                for(std::size_t i = 0; i < size; i++)
+//                {
+//                    if(data[i] != '\n')
+//                    {
+//                        str += data[i];
+//                    }
+//                    else
+//                    {
+//                        commandStorage.addString(handle_, str);
+//                        str = "";
+//                    }
+//                    i++;
+//                }
+                std::cout << read_str << std::endl;
                 do_read();
             }
             else
