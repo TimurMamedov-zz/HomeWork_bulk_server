@@ -8,7 +8,6 @@ CommandsStorage::CommandsStorage(std::size_t bulk_size)
 {
     solvers.reserve(3);
     threads.reserve(3);
-    finish.store(false);
     commandsCount.store(0);
     blocksCount.store(0);
     stringsCount.store(0);
@@ -29,7 +28,7 @@ CommandsStorage::CommandsStorage(std::size_t bulk_size)
 
 CommandsStorage::~CommandsStorage()
 {
-    finish.store(true);
+    finish = true;
     cond_var_file.notify_all();
     cond_var_log.notify_all();
 
@@ -70,6 +69,11 @@ void CommandsStorage::addString(handle_type handle, const std::string& str)
 void CommandsStorage::dumpResidues()
 {
     forcing_push(commonHandle);
+    if(connections.size() > 1)
+    {
+        connections.clear();
+        connections.emplace(commonHandle, connection_type());
+    }
 }
 
 void CommandsStorage::addCommand(handle_type handle, const std::string& command)

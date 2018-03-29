@@ -33,24 +33,16 @@ private:
     void do_read()
     {
         auto self(shared_from_this());
-        boost::asio::async_read(socket_,
-                                boost::asio::buffer(read_str, 10),
-                                [this, self](boost::system::error_code ec, std::size_t length)
+        boost::asio::async_read_until(socket_,
+                                streambuf, '\n',
+                                [this, self](boost::system::error_code ec, std::size_t /*length*/)
         {
             if (!ec)
             {
-                for(std::size_t i = 0; i < length; i++)
-                {
-                    if(read_str[i] != '\n')
-                    {
-                        str += read_str[i];
-                    }
-                    else
-                    {
-                        commandsStorage.addString(shared_from_this(), str);
-                        str = "";
-                    }
-                }
+                std::istream is(&streambuf);
+                std::string line;
+                std::getline(is, line);
+                commandsStorage.addString(self, line);
                 do_read();
             }
             else
@@ -62,9 +54,9 @@ private:
         });
     }
 
+    boost::asio::streambuf streambuf;
     ba::ip::tcp::socket socket_;
     std::set<bulk_session_ptr>& bulk_sessions_;
     CommandsStorage& commandsStorage;
-    char read_str[10];
     std::string str;
 };

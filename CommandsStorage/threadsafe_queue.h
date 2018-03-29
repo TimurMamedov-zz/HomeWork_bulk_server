@@ -47,5 +47,5 @@ private:
     std::queue<T> queue;
     mutable std::mutex mt;
     std::condition_variable& data_cond;
-    const std::atomic_bool& finish;
+    const bool& finish;
 };

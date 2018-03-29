@@ -43,7 +43,7 @@ private:
 
     std::vector<std::thread> threads;
     std::vector<std::unique_ptr<Solver> > solvers;
-    std::atomic_bool finish;
+    bool finish = false;
     std::condition_variable cond_var_log;
     std::condition_variable cond_var_file;
 
