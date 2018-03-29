@@ -8,7 +8,7 @@ public:
                 const ba::ip::tcp::endpoint& endpoint, const std::size_t& bulk_size)
         : acceptor_(io_service, endpoint),
           socket_(io_service),
-          bulkSize(bulk_size)
+          commandsStorage(bulk_size)
     {
         do_accept();
     }
@@ -21,7 +21,7 @@ private:
         {
             if (!ec)
             {
-                std::make_shared<bulk_session>(std::move(socket_), bulk_sessions)->start();
+                std::make_shared<bulk_session>(std::move(socket_), bulk_sessions, commandsStorage)->start();
             }
 
             do_accept();
@@ -30,6 +30,5 @@ private:
     std::set<bulk_session_ptr> bulk_sessions;
     ba::ip::tcp::acceptor acceptor_;
     ba::ip::tcp::socket socket_;
-    const std::size_t bulkSize;
-    //  chat_room room_;
+    CommandsStorage commandsStorage;
 };

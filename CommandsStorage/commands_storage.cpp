@@ -12,6 +12,7 @@ CommandsStorage::CommandsStorage(std::size_t bulk_size)
     commandsCount.store(0);
     blocksCount.store(0);
     stringsCount.store(0);
+    connections.emplace(commonHandle, connection_type());
 
     solvers.emplace_back(std::make_unique<SaveSolver>(file_queue));
     solvers.emplace_back(std::make_unique<SaveSolver>(file_queue));
@@ -48,11 +49,6 @@ CommandsStorage::~CommandsStorage()
 
 void CommandsStorage::addString(handle_type handle, const std::string& str)
 {
-    if(str == "{")
-    {
-
-    }
-
     if(connections.find(handle) != connections.end())
     {
         if(str == "{" || str == "}")
@@ -62,6 +58,18 @@ void CommandsStorage::addString(handle_type handle, const std::string& str)
 
         stringsCount++;
     }
+    else if(str == "{")
+    {
+        addSeparateQueue(handle);
+        addString(handle, str);
+    }
+    else if(str != "}")
+        addCommand(commonHandle, str);
+}
+
+void CommandsStorage::dumpResidues()
+{
+    forcing_push(commonHandle);
 }
 
 void CommandsStorage::addCommand(handle_type handle, const std::string& command)
@@ -87,6 +95,8 @@ void CommandsStorage::queues_push(handle_type handle)
     commandsCount += connections[handle].second.size();
     blocksCount++;
     connections[handle].second.clear();
+    if(handle != commonHandle)
+        deleteSeparateQueue(handle);
 }
 
 void CommandsStorage::forcing_push(handle_type handle)
@@ -111,7 +121,7 @@ void CommandsStorage::deleteSeparateQueue(handle_type handle)
 {
     if(connections.find(handle) != connections.end())
     {
-        forcing_push(handle);
+//        forcing_push(handle);
         connections.erase(handle);
         firstBulkTimes.erase(handle);
     }

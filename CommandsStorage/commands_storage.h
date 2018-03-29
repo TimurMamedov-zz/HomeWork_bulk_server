@@ -33,9 +33,11 @@ public:
     CommandsStorage& operator =(const CommandsStorage&) = delete;
     ~CommandsStorage();
     void addString(handle_type handle, const std::string& str);
+    void dumpResidues();
 
 private:
     const std::size_t bulkSize;
+    handle_type commonHandle;
     std::map<handle_type, connection_type> connections;
     std::map<handle_type, std::chrono::system_clock::time_point> firstBulkTimes;
 
