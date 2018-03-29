@@ -58,5 +58,4 @@ private:
     ba::ip::tcp::socket socket_;
     std::set<bulk_session_ptr>& bulk_sessions_;
     CommandsStorage& commandsStorage;
-    std::string str;
 };
