@@ -54,8 +54,6 @@ void CommandsStorage::addString(handle_type handle, const std::string& str)
             addBracket(handle, str);
         else
             addCommand(handle, str);
-
-        stringsCount++;
     }
     else if(str == "{")
     {
@@ -64,6 +62,8 @@ void CommandsStorage::addString(handle_type handle, const std::string& str)
     }
     else if(str != "}")
         addCommand(commonHandle, str);
+
+    stringsCount++;
 }
 
 void CommandsStorage::dumpResidues()

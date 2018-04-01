@@ -13,7 +13,7 @@ class ThreadSave_Queue
 {
 public:
     explicit ThreadSave_Queue(std::condition_variable& data_cond_,
-                              const std::atomic_bool& finish_)
+                              const bool& finish_)
         : data_cond(data_cond_), finish(finish_){}
     ThreadSave_Queue(const ThreadSave_Queue& ) = delete;
     ThreadSave_Queue& operator =(const ThreadSave_Queue& ) = delete;

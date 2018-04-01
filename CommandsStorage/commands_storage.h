@@ -36,6 +36,7 @@ public:
     void dumpResidues();
 
 private:
+    bool finish = false;
     const std::size_t bulkSize;
     handle_type commonHandle;
     std::map<handle_type, connection_type> connections;
@@ -43,7 +44,6 @@ private:
 
     std::vector<std::thread> threads;
     std::vector<std::unique_ptr<Solver> > solvers;
-    bool finish = false;
     std::condition_variable cond_var_log;
     std::condition_variable cond_var_file;
 
