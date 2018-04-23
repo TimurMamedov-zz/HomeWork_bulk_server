@@ -50,6 +50,7 @@ private:
                 bulk_sessions_.erase(shared_from_this());
                 if(bulk_sessions_.empty())
                     commandsStorage.dumpResidues();
+                socket_.close();
             }
         });
     }
